@@ -437,7 +437,6 @@ export class QPSolver {
         }
       }
       if (!hasQuadraticTerm) {
-        console.log(`Adding regularization for term ${i}`)
         Dmat[i][i] = regularization
       }
     }
