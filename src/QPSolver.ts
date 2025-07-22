@@ -83,10 +83,10 @@ export class QPTerms {
 
   addTerms(other: QPTerms) {
     for (let i = 0; i < other.terms.length; i++) {
-      this.terms[i] = this.terms[i] ?? []
-      const col = other.terms[i] ?? []
+      this.terms[i] = this.terms[i] || []
+      const col = other.terms[i] || []
       for (let j = 0; j < col.length; j++) {
-        this.terms[i][j] = this.terms[i][j] ?? 0
+        this.terms[i][j] = this.terms[i][j] || 0
         this.terms[i][j] += col[j]
       }
     }
@@ -234,7 +234,7 @@ export class QPTerms {
         for (const v of totalVars) {
           const absV = Math.abs(v)
           const sign = v > 0 ? 1 : -1
-          varCounts.set(absV, (varCounts.get(absV) ?? 0) + sign)
+          varCounts.set(absV, (varCounts.get(absV) || 0) + sign)
         }
 
         // Ensure no variable count goes negative
