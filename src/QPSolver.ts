@@ -87,7 +87,7 @@ export class QPTerms {
       const col = other.terms[i] || []
       for (let j = 0; j < col.length; j++) {
         this.terms[i][j] = this.terms[i][j] || 0
-        this.terms[i][j] += col[j]
+        this.terms[i][j] += col[j] || 0
       }
     }
     return this
