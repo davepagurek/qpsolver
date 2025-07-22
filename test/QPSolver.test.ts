@@ -114,6 +114,18 @@ describe('QPSolver basic functionality', () => {
     expect(x.value()).toBeCloseTo(6)
   })
 
+  it('solves equations where some variables are not present in the cost', () => {
+    const solver = new QPSolver()
+    const x = solver.createVariable()
+    const y = solver.createVariable()
+
+    solver.addConstraint(x.eq(y.add(1)))
+    solver.addCost(y.mult(y))
+    solver.solve()
+    expect(y.value()).toBeCloseTo(0)
+    expect(x.value()).toBeCloseTo(1)
+  })
+
   describe('invalid expressions', () => {
     it('throws when creating a rational expression by dividing by multiple terms', () => {
       const solver = new QPSolver()

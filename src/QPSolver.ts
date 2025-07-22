@@ -423,21 +423,21 @@ export class QPSolver {
       }
     }
 
-    // Add regularization if Dmat is all zeros (ignoring index 0). Otherwise,
-    // purely linear problems may not work.
-    let hasQuadraticTerm = false
+    // Every variable must appear in the quadratic cost in order for the D
+    // matrix to be positive definite, a requirement of the solver. We
+    // check here to see if this is not the case, and add a small regularization
+    // term if so.
+    const regularization = 1e-8
     for (let i = 1; i <= n; i++) {
+      let hasQuadraticTerm = false
       for (let j = 1; j <= n; j++) {
         if (Dmat[i][j] !== 0) {
           hasQuadraticTerm = true
           break
         }
       }
-      if (hasQuadraticTerm) break
-    }
-    if (!hasQuadraticTerm) {
-      const regularization = 1e-8
-      for (let i = 1; i <= n; i++) {
+      if (!hasQuadraticTerm) {
+        console.log(`Adding regularization for term ${i}`)
         Dmat[i][i] = regularization
       }
     }
@@ -476,6 +476,9 @@ export class QPSolver {
     gtConstraints.forEach((c, idx) => processConstraint(c, meq + idx))
 
     const result = quadprog.solveQP(Dmat, dvec, Amat, bvec, meq)
+    if (result.message) {
+      throw new Error(result.message)
+    }
 
     this.solution = result.solution
   }
